@@ -30,10 +30,13 @@ module.exports = {
       ].join('\n');
 
       const client = getGeminiClient();
-      const model = client.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
-      const result = await model.generateContent(prompt);
-      const text = result?.response?.text() || 'Maaf, tidak ada output.';
+      // SDK baru memanggil generateContent langsung dari module models
+      const result = await client.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+      });
+      const text = result?.text || 'Maaf, tidak ada output.';
 
       res.json({ message: 'OK', cover_letter: text });
     } catch (err) {
