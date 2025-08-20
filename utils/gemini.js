@@ -1,9 +1,9 @@
-// Inisialisasi Google Gemini sederhana
-const { GoogleGenerativeAI } = require('@google/genai');
+// Inisialisasi Google Gemini menggunakan SDK terbaru
+const { GoogleGenAI } = require('@google/genai');
 
+// Membuat instance klien Gemini dengan API key
 function getGeminiClient() {
-  const client = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  return client;
+  return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 }
 
 module.exports = { getGeminiClient };
