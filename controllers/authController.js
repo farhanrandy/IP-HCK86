@@ -8,7 +8,7 @@ module.exports = {
   async googleLogin(req, res, next) {
     try {
       const { idToken } = req.body;
-      if (!idToken) return res.status(400).json({ message: 'idToken is required' });
+      if (!idToken) throw { status: 400, message: 'idToken is required' };
 
       // Verifikasi token ke Google
       const { name, email, googleId } = await verifyGoogleIdToken(idToken);

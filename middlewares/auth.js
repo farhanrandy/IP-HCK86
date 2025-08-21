@@ -9,7 +9,8 @@ module.exports = function auth(req, res, next) {
     const token = parts.length === 2 && parts[0] === 'Bearer' ? parts[1] : null;
 
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      // jika tidak ada token lempar error khusus
+      throw { name: 'Unauthenticated' };
     }
 
     const payload = jwt.verify(token, process.env.JWT_SECRET);
@@ -17,6 +18,7 @@ module.exports = function auth(req, res, next) {
     req.user = { id: payload.id, email: payload.email, name: payload.name };
     next();
   } catch (err) {
-    return res.status(401).json({ message: 'Invalid token' });
+    // lempar error ke errorHandler
+    next(err);
   }
 };

@@ -96,7 +96,7 @@ module.exports = {
   async searchJobs(req, res, next) {
     try {
       const { q = '', location = '', next_page_token = '' } = req.query;
-      if (!q.trim()) return res.status(400).json({ message: 'Query q is required' });
+      if (!q.trim()) throw { status: 400, message: 'Query q is required' };
 
       const raw = await searchJobs({ q, location, next_page_token });
 
@@ -117,7 +117,7 @@ module.exports = {
       if (err.response) {
         const s = err.response.status || 500;
         const m = err.response.data?.error || err.response.data?.message || 'Upstream error';
-        return res.status(s).json({ message: `SerpAPI: ${m}` });
+        return next({ status: s, message: `SerpAPI: ${m}` });
       }
       next(err);
     }

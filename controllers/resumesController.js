@@ -22,7 +22,7 @@ module.exports = {
       const userId = req.user.id;
       const { title = '', contentText = '' } = req.body;
 
-      if (!title) return res.status(400).json({ message: 'title is required' });
+      if (!title) throw { status: 400, message: 'title is required' };
 
       const created = await Resume.create({ userId, title, contentText });
       res.status(201).json({ message: 'Created', data: created });
@@ -39,7 +39,7 @@ module.exports = {
       const { title, contentText } = req.body;
 
       const found = await Resume.findOne({ where: { id, userId } });
-      if (!found) return res.status(404).json({ message: 'Not Found' });
+      if (!found) throw { name: 'Data not found' };
 
       if (title !== undefined) found.title = title;
       if (contentText !== undefined) found.contentText = contentText;
@@ -58,7 +58,7 @@ module.exports = {
       const { id } = req.params;
 
       const found = await Resume.findOne({ where: { id, userId } });
-      if (!found) return res.status(404).json({ message: 'Not Found' });
+      if (!found) throw { name: 'Data not found' };
 
       await found.destroy();
       res.json({ message: 'Deleted' });
