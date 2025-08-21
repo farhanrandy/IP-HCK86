@@ -6,7 +6,11 @@ module.exports = function auth(req, res, next) {
     // Ambil token dari header: Authorization: Bearer <token>
     const authHeader = req.headers.authorization || '';
     const parts = authHeader.split(' ');
-    const token = parts.length === 2 && parts[0] === 'Bearer' ? parts[1] : null;
+    // allow case-insensitive "Bearer" scheme to support different clients
+    const token =
+      parts.length === 2 && parts[0].toLowerCase() === 'bearer'
+        ? parts[1]
+        : null;
 
     if (!token) {
       // jika tidak ada token lempar error khusus
