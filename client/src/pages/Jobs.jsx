@@ -8,8 +8,11 @@ export default function Jobs() {
   const dispatch = useDispatch()
   const { list, status, error, q, location } = useSelector(s=>s.jobs)
 
-  useEffect(()=>{ 
-    if (list.length === 0) dispatch(fetchJobs({ q: '', location: '', page: 1 }))
+  // Hindari fetch otomatis ketika q kosong yang menyebabkan 400 dari backend
+  useEffect(()=>{
+    if (list.length === 0 && q.trim()) {
+      dispatch(fetchJobs({ q, location, page: 1 }))
+    }
   }, []) // eslint-disable-line
 
   const handleSearch = (e) => {
