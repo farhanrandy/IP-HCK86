@@ -1,12 +1,22 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Job Finder + AI Resume Helper</title>
-  </head>
-  <body class="bg-gray-50">
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Finder + AI Cover Letter</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    @page { size: A4; margin: 18mm; }
+    .no-print { display: inline-block; }
+    @media print {
+      .no-print { display: none !important; }
+      body { color:#111827; font:14px/1.6 ui-sans-serif, system-ui, Arial; }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-zinc-50">
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
 </html>

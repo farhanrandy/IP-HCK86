@@ -1,58 +1,40 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { logout } from '../features/auth/authSlice'
+import { useSelector, useDispatch } from 'react-redux'
+import { logout } from '@/slices/authSlice'
 
-function NavLink({ to, children }) {
-  const { pathname } = useLocation()
-  const active = pathname === to
-  return (
-    <Link
-      className={
-        'px-3 py-2 rounded-lg text-sm font-medium ' +
-        (active ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100')
-      }
-      to={to}
-    >
-      {children}
-    </Link>
-  )
-}
-
-export default function Navbar() {
+export default function Navbar(){
+  const { token, user } = useSelector(s=>s.auth)
+  const location = useLocation()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const token = useSelector(s => s.auth.accessToken)
 
-  const handleLogout = () => {
-    dispatch(logout())
-    navigate('/login')
-  }
+  const items = [
+    { to: '/jobs', label: 'Jobs' },
+    { to: '/saved', label: 'Saved' },
+    { to: '/resumes', label: 'Resumes' },
+    { to: '/settings', label: 'Settings' },
+  ]
 
   return (
-    <header className="border-b bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-30">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="flex items-center gap-3 py-3">
-          <Link to="/jobs" className="text-lg font-semibold">JobFinder</Link>
-          <nav className="flex gap-1 ml-2">
-            <NavLink to="/jobs">Jobs</NavLink>
-            <NavLink to="/saved">Saved</NavLink>
-            <NavLink to="/resumes">Resumes</NavLink>
-            <NavLink to="/ai">AI Helper</NavLink>
-          </nav>
-          <div className="ml-auto">
-            {token ? (
-              <button
-                onClick={handleLogout}
-                className="px-3 py-2 rounded-lg bg-gray-900 text-white hover:bg-black"
-              >
-                Logout
-              </button>
-            ) : (
-              <Link to="/login" className="px-3 py-2 rounded-lg bg-gray-900 text-white">
-                Login
-              </Link>
-            )}
-          </div>
+    <header className="sticky top-0 z-40 w-full border-b bg-white/70 backdrop-blur">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+        <Link to="/" className="font-semibold tracking-tight">JobFinder<span className="text-blue-600">AI</span></Link>
+        <nav className="hidden gap-4 md:flex">
+          {items.map(it => (
+            <Link key={it.to} to={it.to} className={`text-sm ${location.pathname.startsWith(it.to) ? 'text-blue-600' : 'text-zinc-700'} hover:underline`}>
+              {it.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="flex items-center gap-3">
+          {token ? (
+            <>
+              <span className="hidden text-sm text-zinc-600 md:inline">Hi, {user?.name || 'User'}</span>
+              <button onClick={()=>{ dispatch(logout()); navigate('/login') }} className="rounded-lg bg-zinc-900 px-3 py-1.5 text-sm text-white">Logout</button>
+            </>
+          ) : (
+            <Link to="/login" className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white">Login</Link>
+          )}
         </div>
       </div>
     </header>
