@@ -16,9 +16,9 @@ app.use(express.json()); // supaya bisa baca JSON body
 // Route utama
 app.use('/', routes);
 
-// 404 handler sederhana
+// 404 handler sederhana -> lempar ke errorHandler
 app.use((req, res, next) => {
-  res.status(404).json({ message: 'Not Found' });
+  next({ name: 'Data not found' });
 });
 
 // Error handler global sederhana: selalu balikan { message }

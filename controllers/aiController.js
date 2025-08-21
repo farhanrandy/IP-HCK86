@@ -8,7 +8,8 @@ module.exports = {
       // ambil input sederhana
       const { resume_text = '', job_description = '', tone = 'profesional', lang = 'id' } = req.body;
       if (!resume_text || !job_description) {
-        return res.status(400).json({ message: 'resume_text and job_description are required' });
+        // lempar error agar ditangani errorHandler
+        throw { status: 400, message: 'resume_text and job_description are required' };
       }
 
       // Siapkan prompt yang mudah dimengerti

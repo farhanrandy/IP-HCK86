@@ -23,8 +23,8 @@ module.exports = {
       const userId = req.user.id;
       const { jobExternalId = '', source = 'google', jobPayload = {} } = req.body;
 
-      if (!jobExternalId) return res.status(400).json({ message: 'jobExternalId is required' });
-      if (!source) return res.status(400).json({ message: 'source is required' });
+      if (!jobExternalId) throw { status: 400, message: 'jobExternalId is required' };
+      if (!source) throw { status: 400, message: 'source is required' };
 
       const created = await SavedJob.create({
         userId,
@@ -37,7 +37,6 @@ module.exports = {
     } catch (err) {
       if (err instanceof UniqueConstraintError) {
         // Jika duplikat (unik pada userId + jobExternalId + source)
-        err.status = 409;
         err.message = 'Already saved';
       }
       next(err);
@@ -51,7 +50,7 @@ module.exports = {
       const { id } = req.params;
 
       const found = await SavedJob.findOne({ where: { id, userId } });
-      if (!found) return res.status(404).json({ message: 'Not Found' });
+      if (!found) throw { name: 'Data not found' };
 
       await found.destroy();
       res.json({ message: 'Deleted' });
