@@ -15,7 +15,7 @@ export const saveJob = createAsyncThunk('saved/add', async (payload, { rejectWit
     const { data } = await http.post('/saved', payload)
     return { item: data?.data || data }
   } catch (err) {
-    return rejectWithValue(err.response.data.message || err.message)
+    return rejectWithValue(err?.response?.data?.message || err.message)
   }
 })
 

@@ -20,7 +20,8 @@ module.exports = {
   // POST /saved -> simpan payload job ke JSONB
   async saveJob(req, res, next) {
     try {
-      const userId = req.user.id;
+      const userId = req.user?.id;
+      if (!userId) throw { name: 'Unauthenticated' };
       const { jobExternalId = '', source = 'google', jobPayload = {} } = req.body;
 
       if (!jobExternalId) throw { status: 400, message: 'jobExternalId is required' };
@@ -46,7 +47,8 @@ module.exports = {
   // DELETE /saved/:id
   async deleteSavedJob(req, res, next) {
     try {
-      const userId = req.user.id;
+      const userId = req.user?.id;
+      if (!userId) throw { name: 'Unauthenticated' };
       const { id } = req.params;
 
       const found = await SavedJob.findOne({ where: { id, userId } });
