@@ -81,6 +81,7 @@ import LoadingSkeleton from '@/components/ui/LoadingSkeleton'
 export default function JobsPage(){
   const dispatch = useDispatch()
   const { q, location, results, status, error } = useSelector(s=>s.jobs)
+  const savedList = useSelector(s=>s.saved.list)
 
   const handleSearch = ()=>{
     if (!q || !q.trim()) return
@@ -147,19 +148,28 @@ export default function JobsPage(){
         <EmptyState title="Tidak ada hasil" description="Coba ubah kata kunci atau lokasi." />
       ) : (
         <div className="grid gap-3">
-          {results.map(job => (
-            <div key={job.externalId} className="rounded-xl border bg-white p-4">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <h3 className="text-lg font-semibold">{job.title}</h3>
-                  <p className="text-sm text-zinc-600">{job.company} • {job.location || 'Lokasi tidak tersedia'}</p>
-                </div>
-                <div className="flex gap-2">
-                  <button onClick={()=>handleSave(job)} className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white">Save</button>
+          {results.map(job => {
+            const alreadySaved = savedList.some(j=> j.jobExternalId === job.externalId)
+            return (
+              <div key={job.externalId} className="rounded-xl border bg-white p-4">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h3 className="text-lg font-semibold">{job.title}</h3>
+                    <p className="text-sm text-zinc-600">{job.company} • {job.location || 'Lokasi tidak tersedia'}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      disabled={alreadySaved}
+                      onClick={()=>handleSave(job)}
+                      className={`rounded-lg px-3 py-1.5 text-sm text-white ${alreadySaved ? 'bg-zinc-400 cursor-not-allowed' : 'bg-blue-600'}`}
+                    >
+                      {alreadySaved ? 'Saved' : 'Save'}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
     </section>

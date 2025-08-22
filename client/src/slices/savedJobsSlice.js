@@ -22,6 +22,11 @@ const savedJobsSlice = createSlice({
     b.addCase(fetchSavedJobs.pending, (s)=>{ s.status='loading'; s.error=null })
      .addCase(fetchSavedJobs.fulfilled, (s,a)=>{ s.status='succeeded'; s.list=a.payload?.data || [] })
      .addCase(fetchSavedJobs.rejected, (s,a)=>{ s.status='failed'; s.error=a.error?.message || 'Gagal mengambil saved jobs' })
+     .addCase(saveJob.fulfilled, (s,a)=>{
+       const item = a.payload?.data
+       if (item) s.list.unshift(item)
+     })
+     .addCase(saveJob.rejected, (s,a)=>{ s.error = a.error?.message || 'Gagal menyimpan job' })
      .addCase(deleteSavedJob.fulfilled, (s,a)=>{ s.list = s.list.filter(j=> j.id !== a.payload.id) })
   }
 })
