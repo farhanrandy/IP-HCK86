@@ -1,11 +1,10 @@
 if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config(); // Memuat variabel lingkungan dari .env
+  require('dotenv').config(); // Hanya load .env di non-production
 }
 // Aplikasi Express utama (CommonJS)
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-
 const routes = require('./routes'); // index.js di folder routes
 const errorHandler = require('./middlewares/errorHandler');
 

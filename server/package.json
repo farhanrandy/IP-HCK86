@@ -5,10 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js",
-    "db:create": "sequelize-cli db:create",
-    "db:migrate": "sequelize-cli db:migrate",
-    "db:seed": "sequelize-cli db:seed:all"
+    "start": "node index.js"
   },
   "keywords": [
     "express",
