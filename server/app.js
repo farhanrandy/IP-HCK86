@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config(); // Memuat variabel lingkungan dari .env
+}
 // Aplikasi Express utama (CommonJS)
 const express = require('express');
 const morgan = require('morgan');
