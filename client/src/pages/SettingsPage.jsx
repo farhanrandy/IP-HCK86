@@ -1,40 +1,31 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { setLanguage, setDefaultResumeId } from '@/slices/settingsSlice'
-import { useEffect } from 'react'
-import { fetchResumes } from '@/slices/resumesSlice'
+import { useState } from 'react';
 
-export default function SettingsPage(){
-  const dispatch = useDispatch()
-  const { language, defaultResumeId } = useSelector(s=>s.settings)
-  const { list } = useSelector(s=>s.resumes)
-  const { user } = useSelector(s=>s.auth)
+export default function SettingsPage() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
 
-  useEffect(()=>{ if (!list.length) dispatch(fetchResumes()) }, [dispatch])
+  const handleSave = (e) => {
+    e.preventDefault();
+    alert('Settings saved');
+  };
 
   return (
-    <div className="rounded-xl border bg-white p-4">
-      <h3 className="font-semibold">Settings</h3>
-
-      <div className="mt-3">
-        <label className="block text-sm">Bahasa default (cover letter)</label>
-        <select className="w-full rounded-lg border px-3 py-2" value={language} onChange={e=>dispatch(setLanguage(e.target.value))}>
-          <option value="id">Indonesia</option>
-          <option value="en">English</option>
-        </select>
-      </div>
-
-      <div className="mt-3">
-        <label className="block text-sm">Default Resume</label>
-        <select className="w-full rounded-lg border px-3 py-2" value={defaultResumeId || ''} onChange={e=>dispatch(setDefaultResumeId(e.target.value || null))}>
-          <option value="">-- pilih --</option>
-          {list.map(r => <option key={r.id} value={r.id}>{r.title}</option>)}
-        </select>
-      </div>
-
-      <div className="mt-6 rounded-lg border bg-zinc-50 p-3 text-sm">
-        <div><b>Nama:</b> {user?.name || '-'}</div>
-        <div><b>Email:</b> {user?.email || '-'}</div>
-      </div>
+    <div className="p-4">
+      <form onSubmit={handleSave} className="flex flex-col gap-2 max-w-md">
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Name"
+          className="border p-2"
+        />
+        <input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          className="border p-2"
+        />
+        <button className="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+      </form>
     </div>
-  )
+  );
 }
